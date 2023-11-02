@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prepvrse/resources/constant/theme.dart';
+import 'package:prepvrse/screens/home/ui_home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Center(
-        child: Text("PrepVRse"),
-      ),
+      theme: Themes.lightThemeData(),
+      home: const HomeScreen(),
     );
   }
 }
