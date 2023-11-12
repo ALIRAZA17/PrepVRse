@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "546418221172",
+    "project_id": "prepvrse",
+    "storage_bucket": "prepvrse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546418221172:android:6c76339ec1a1b7b7f93121",
+        "android_client_info": {
+          "package_name": "com.example.prepvrse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUKkmdCA7O8jz0ZDdtGEAQTNfy3KEMl0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
