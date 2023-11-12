@@ -1,16 +1,4 @@
-# prepvrse
+# PrepVRse
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Abstract
+PrepVRse is a virtual reality (VR) based product aimed at enhancing communication skills for individuals of all levels using Large Language Models (LLMs) and Computer Vision. By leveraging immersive technology,   PrepVRse provides a realistic and engaging environment to develop effective communication abilities. Through interactive simulations, users can practice presentations, refine their speaking, and improve their overall delivery through processing of the data using NLP techniques. The project incorporates cutting-edge technologies such as AI-powered feedback systems to provide personalized guidance and analysis. The scope of PrepVRse extends to various aspects of communication, including public speaking, storytelling, non-verbal communication, gestures and interview skills. The ultimate goal is to empower individuals with the necessary tools and confidence to communicate effectively in any professional or personal setting.
