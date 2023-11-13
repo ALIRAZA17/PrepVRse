@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prepvrse/resources/constant/styles.dart';
+import 'package:prepvrse/common/constants/styles.dart';
 
 class Themes {
   static ThemeData lightThemeData() {

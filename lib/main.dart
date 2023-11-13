@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:prepvrse/resources/constant/theme.dart';
-import 'package:prepvrse/screens/home/ui_home_screen.dart';
+import 'package:prepvrse/common/constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:prepvrse/screens/signup/ui_signup_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: Themes.lightThemeData(),
-      home: const HomeScreen(),
+      home: const SignUpScreen(),
     );
   }
 }

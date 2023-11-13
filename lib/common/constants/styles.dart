@@ -5,7 +5,9 @@ class Styles {
   static Color trans = Colors.transparent;
   static Color backgroundColor = Colors.white;
 
-  static Color primaryColor = const Color.fromARGB(255, 72, 178, 109);
+  static Color primaryColor = const Color.fromARGB(255, 17, 17, 17);
+  static Color secondaryColor = const Color.fromARGB(255, 178, 144, 144);
+  static Color tertiaryColor = const Color.fromARGB(255, 72, 178, 109);
 
   //Light Mode TextStyles
 
