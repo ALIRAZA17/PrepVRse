@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
 import 'package:prepvrse/common/resources/widgets/textfields/app_text_field.dart';
+import 'package:prepvrse/screens/signup/provider/confirm_password_text_controller_provider.dart';
+import 'package:prepvrse/screens/signup/provider/email_text_controller_provider.dart';
+import 'package:prepvrse/screens/signup/provider/name_text_controller_provider.dart';
+import 'package:prepvrse/screens/signup/provider/password_text_controller_provider.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
+    final nameController = ref.watch(nameTextControllerProvider);
+    final emailController = ref.watch(eamilTextControllerProvider);
+    final passwordController = ref.watch(passwordTextControllerProvider);
+    final confirmPasswordController =
+        ref.watch(confirmPasswordTextControllerProvider);
 
     return Scaffold(
       body: Padding(
@@ -40,7 +54,7 @@ class SignUpScreen extends StatelessWidget {
             AppTextField(
               label: "Email",
               keyboardType: TextInputType.name,
-              controller: nameController,
+              controller: emailController,
               validator: (_) {
                 return null;
               },
@@ -51,7 +65,7 @@ class SignUpScreen extends StatelessWidget {
             AppTextField(
               label: "Password",
               keyboardType: TextInputType.name,
-              controller: nameController,
+              controller: passwordController,
               validator: (_) {
                 return null;
               },
@@ -62,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
             AppTextField(
               label: "Confirm Password",
               keyboardType: TextInputType.name,
-              controller: nameController,
+              controller: confirmPasswordController,
               validator: (_) {
                 return null;
               },
