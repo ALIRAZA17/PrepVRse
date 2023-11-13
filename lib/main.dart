@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prepvrse/common/constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:prepvrse/screens/signup/ui_signup_screen.dart';
+import 'package:prepvrse/screens/login/ui_login_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: Themes.lightThemeData(),
-      home: const SignUpScreen(),
+      home: const LoginScreen(),
     );
   }
 }

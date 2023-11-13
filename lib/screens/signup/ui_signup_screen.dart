@@ -17,9 +17,18 @@ class SignUpScreen extends ConsumerStatefulWidget {
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
+  void initState() {
+    ref.read(emailTextControllerProvider).clear();
+    ref.read(passwordTextControllerProvider).clear();
+    ref.read(nameTextControllerProvider).clear();
+    ref.read(confirmPasswordTextControllerProvider).clear();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final nameController = ref.watch(nameTextControllerProvider);
-    final emailController = ref.watch(eamilTextControllerProvider);
+    final emailController = ref.watch(emailTextControllerProvider);
     final passwordController = ref.watch(passwordTextControllerProvider);
     final confirmPasswordController =
         ref.watch(confirmPasswordTextControllerProvider);
