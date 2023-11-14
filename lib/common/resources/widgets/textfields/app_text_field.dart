@@ -23,12 +23,7 @@ class AppTextField extends StatelessWidget {
       width: double.infinity,
       child: TextFormField(
         decoration: InputDecoration(
-          label: Text(
-            label,
-            style: Styles.displaySmNormalStyle.copyWith(
-              color: Styles.primaryColor,
-            ),
-          ),
+          label: Text(label, style: Styles.displaySmNormalStyle),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(8),

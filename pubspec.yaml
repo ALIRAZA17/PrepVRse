@@ -20,6 +20,8 @@ dependencies:
   flutter_riverpod: ^2.4.5
   firebase_auth: ^4.13.0
   get: ^4.6.6
+  dropdown_button2: ^2.3.9
+
 
 dev_dependencies:
   flutter_test:

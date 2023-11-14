@@ -70,12 +70,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         ref.watch(confirmPasswordTextControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Signup"),
-      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8, top: 40),
+          padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8, top: 90),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

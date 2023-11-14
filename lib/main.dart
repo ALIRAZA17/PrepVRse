@@ -26,8 +26,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: Themes.lightThemeData(),
-      initialRoute: '/signup',
+      initialRoute: '/home',
       getPages: appRoutes(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
