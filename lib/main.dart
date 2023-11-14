@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:prepvrse/common/constants/routes.dart';
 import 'package:prepvrse/common/constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:prepvrse/screens/login/ui_login_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,10 +23,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: Themes.lightThemeData(),
-      home: const LoginScreen(),
+      initialRoute: '/signup',
+      getPages: appRoutes(),
     );
   }
 }
