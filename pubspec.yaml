@@ -21,7 +21,6 @@ dependencies:
   firebase_auth: ^4.13.0
   get: ^4.6.6
   dropdown_button2: ^2.3.9
-  audio_waveforms: ^1.0.4
   path_provider: ^2.1.1
   file_picker: ^6.1.1
   just_audio: ^0.9.36
