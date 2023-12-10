@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:prepvrse/screens/home/ui_home_screen.dart';
 import 'package:prepvrse/screens/login/ui_login_screen.dart';
 import 'package:prepvrse/screens/signup/ui_signup_screen.dart';
+import 'package:prepvrse/testing.dart';
 
 appRoutes() => [
       GetPage(
@@ -21,5 +22,11 @@ appRoutes() => [
         page: () => const HomeScreen(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 200),
-      )
+      ),
+      GetPage(
+        name: '/testing',
+        page: () => const Testing(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
     ];
