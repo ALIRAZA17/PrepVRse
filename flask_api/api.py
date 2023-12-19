@@ -1,3 +1,4 @@
+import io
 from flask import Flask, request, jsonify
 from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
@@ -11,11 +12,11 @@ model = Model(model_name="vosk-model-en-us-0.22")
 @app.route('/recognize-speech', methods=['POST'])
 def recognize_speech():
     try:
-        audio_file_path = request.form['audioFilePath']
-        mp3 = AudioSegment.from_mp3(audio_file_path)
+        audio_data = request.data
+        audio_stream = io.BytesIO(audio_data)
+        mp3 = AudioSegment.from_file(audio_stream,format="mp3")
         mp3 = mp3.set_channels(CHANNELS)
         mp3 = mp3.set_frame_rate(FRAME_RATE)
-
         rec = KaldiRecognizer(model, FRAME_RATE)
         rec.SetWords(True)
         rec.AcceptWaveform(mp3.raw_data)

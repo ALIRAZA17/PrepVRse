@@ -51,10 +51,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
    - assets/images/logo.png
-   - assets/audios/audio1.mp3
-   - assets/audios/audio2.mp3
-   - assets/audios/audio3.mp3
-   - assets/audios/audio4.mp3
+   - assets/audios/marketplace.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
