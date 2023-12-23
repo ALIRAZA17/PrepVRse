@@ -23,7 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.initState();
   }
 
-  void initialization() async {
+  void initialization() {
     FlutterNativeSplash.remove();
   }
 
