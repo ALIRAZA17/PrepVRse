@@ -34,7 +34,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
   void pickFile() async {
     final pickedFile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'ppt', 'pptx'],
     );
 
     if (pickedFile != null) {
