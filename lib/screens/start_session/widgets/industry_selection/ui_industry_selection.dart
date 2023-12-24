@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/options/optionsContainer.dart';
@@ -14,12 +13,6 @@ class IndustrySelectionScreen extends ConsumerStatefulWidget {
 
 class _IndustrySelectionScreenState
     extends ConsumerState<IndustrySelectionScreen> {
-  @override
-  void initState() {
-    FlutterNativeSplash.remove();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final industries = [

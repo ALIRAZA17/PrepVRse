@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
@@ -19,12 +18,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void initState() {
     ref.read(emailTextControllerProvider).clear();
     ref.read(passwordTextControllerProvider).clear();
-    initialization();
     super.initState();
-  }
-
-  void initialization() {
-    FlutterNativeSplash.remove();
   }
 
   @override
