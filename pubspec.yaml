@@ -20,12 +20,12 @@ dependencies:
   flutter_riverpod: ^2.4.9
   firebase_auth: ^4.15.2
   firebase_storage: ^11.5.6
+  cloud_firestore: ^4.13.6
   get: ^4.6.6
   dropdown_button2: ^2.3.9
   file_picker: ^6.1.1
   flutter_native_splash: ^2.3.8
-  cloud_firestore: ^4.13.6
-
+  http: ^1.1.2
 
 dev_dependencies:
   flutter_test:

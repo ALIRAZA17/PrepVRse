@@ -4,6 +4,7 @@ import 'package:prepvrse/screens/start_session/widgets/industry_selection/ui_ind
 import 'package:prepvrse/screens/login/ui_login_screen.dart';
 import 'package:prepvrse/screens/start_session/widgets/mode_type/ui_mode_type_screen.dart';
 import 'package:prepvrse/screens/signup/ui_signup_screen.dart';
+import 'package:prepvrse/testScreen.dart';
 
 appRoutes() => [
       GetPage(
@@ -33,6 +34,12 @@ appRoutes() => [
       GetPage(
         name: '/audio_upload',
         page: () => const AudioUploadScreen(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+      GetPage(
+        name: '/testing',
+        page: () => ApiScreen(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 200),
       ),
