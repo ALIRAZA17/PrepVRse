@@ -54,8 +54,8 @@ if file_url:
         local_file_path = download_file(file_url, local_directory, file_extension)
         if local_file_path:
             if file_extension == 'pdf':
-                print(textExtractionPDF(local_file_path))  # Process the PDF
+                textExtractionPDF(local_file_path)
             elif file_extension == 'pptx':
-                print(textExtractionPPTX(local_file_path))  # Process the PPTX
+                textExtractionPPTX(local_file_path)
 else:
     print("File URL not found.")
