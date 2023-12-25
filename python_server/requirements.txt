@@ -2,3 +2,5 @@ flask
 flask-cors
 SpeechRecognition
 langchain
+unstructured
+python-pptx
