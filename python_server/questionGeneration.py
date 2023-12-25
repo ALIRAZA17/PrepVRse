@@ -27,7 +27,7 @@ def questionGeneration(extractedText):
     # initialize the models
     openai = OpenAI(
         model_name="text-davinci-003",
-        openai_api_key=OpenApikey,
+        openai_api_key= OpenApikey,
         temperature=1
     )
 

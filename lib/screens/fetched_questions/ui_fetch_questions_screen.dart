@@ -19,15 +19,13 @@ class _ApiScreenState extends State<ApiScreen> {
   Future<void> fetchData() async {
     try {
       http.Response response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/api'),
+        Uri.parse('http://10.0.2.2:5000/api/extract'),
       );
-
-      print(response.body);
       if (response.statusCode == 200) {
         print(json.decode(response.body).toString());
         setState(() {
           final mydata = json.decode(response.body);
-          _data = mydata['message'];
+          _data = mydata['generated_questions'];
         });
       } else {
         setState(() {

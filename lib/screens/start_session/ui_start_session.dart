@@ -19,7 +19,7 @@ class StartSessionScreen extends ConsumerStatefulWidget {
 class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
   List<Map<String, dynamic>> pdfData = [];
   Future<String> uploadPdfToFirebase(String fileName, File file) async {
-    final reference = FirebaseStorage.instance.ref().child("pdfs/$fileName");
+    final reference = FirebaseStorage.instance.ref().child("files/$fileName");
 
     final uploadTask = reference.putFile(file);
 
@@ -41,7 +41,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
       final fileName = pickedFile.files[0].name;
       final file = File(pickedFile.files[0].path!);
       final fileDownloadLink = await uploadPdfToFirebase(fileName, file);
-      _fireStoreRef.collection("pdfs").add(
+      _fireStoreRef.collection("files").add(
         {
           "name": fileName,
           "url": fileDownloadLink,
@@ -55,7 +55,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
   }
 
   void getPdf() async {
-    final fetchedPdf = await _fireStoreRef.collection("pdfs").get();
+    final fetchedPdf = await _fireStoreRef.collection("files").get();
     pdfData = fetchedPdf.docs.map((e) => e.data()).toList();
 
     if (mounted) {
