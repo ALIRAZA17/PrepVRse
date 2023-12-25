@@ -30,7 +30,7 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
   final _fireStoreRef = FirebaseFirestore.instance;
   void pickFile() async {
     final pickedFile = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
+      type: FileType.custom,
       allowedExtensions: ['mp3'],
     );
 
