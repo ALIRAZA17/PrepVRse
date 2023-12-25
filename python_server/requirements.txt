@@ -4,3 +4,4 @@ SpeechRecognition
 langchain
 unstructured
 python-pptx
+openai
