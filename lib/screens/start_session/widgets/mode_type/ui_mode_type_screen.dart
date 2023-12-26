@@ -17,6 +17,7 @@ class ModeTypeScreen extends ConsumerStatefulWidget {
 
 class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   @override
   void initState() {
     ref.read(modeTypeProvider.notifier).state = "";
@@ -130,25 +131,44 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
                 ],
               ),
             ),
-            Positioned(
-              left: 10,
-              bottom: 5,
-              right: 10,
-              child: AppTextButton(
-                text: "Next",
-                onTap: () {
-                  if (_formKey.currentState!.validate()) {
-                    final modeTypeValue =
-                        ref.read(modeTypeProvider.notifier).state;
-                    final isPresentation = modeTypeValue == "Presentation";
-                    Get.to(
-                      () => StartSessionScreen(isPresentation: isPresentation),
-                    );
-                  }
-                },
-                color: Styles.primaryColor,
-              ),
-            )
+            _isLoading
+                ? Positioned(
+                    left: 10,
+                    bottom: 10,
+                    right: 10,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Positioned(
+                    left: 10,
+                    bottom: 5,
+                    right: 10,
+                    child: AppTextButton(
+                      text: "Next",
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await Future.delayed(Duration(milliseconds: 500));
+                          final modeTypeValue =
+                              ref.read(modeTypeProvider.notifier).state;
+                          final isPresentation =
+                              modeTypeValue == "Presentation";
+
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          Get.to(
+                            () => StartSessionScreen(
+                                isPresentation: isPresentation),
+                          );
+                        }
+                      },
+                      color: Styles.primaryColor,
+                    ),
+                  )
           ],
         ),
       ),
