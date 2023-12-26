@@ -23,7 +23,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   Future<void> fetchData(String documentId) async {
     try {
       http.Response response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/api/extract?id=$documentId'),
+        Uri.parse('http://10.7.84.229:5000/api/extract?id=$documentId'),
       );
       if (response.statusCode == 200) {
         print(json.decode(response.body).toString());
