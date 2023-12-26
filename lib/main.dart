@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: Themes.lightThemeData(),
-      initialRoute: '/mode_type',
+      initialRoute: '/audio_upload',
       getPages: appRoutes(),
       debugShowCheckedModeBanner: false,
     );
