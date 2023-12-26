@@ -30,20 +30,20 @@ audios_ref = db.collection("audios")
 @app.route('/api/audio_processing', methods=["GET"])
 def audio_processing():
     try:
-        document_id = request.args.get('id')
-        doc_ref = db.collection("files").document(document_id)
-        doc = doc_ref.get()
-        file_url = None
-        if doc.exists:
-            data = doc.to_dict()
-            file_url = data["url"]
-        else:
-            print("No such document!")
+        # document_id = request.args.get('id')
+        # doc_ref = db.collection("files").document(document_id)
+        # doc = doc_ref.get()
+        # file_url = None
+        # if doc.exists:
+        #     data = doc.to_dict()
+        #     file_url = data["url"]
+        # else:
+        #     print("No such document!")
 
-        if not file_url:
-            return jsonify({"error": "No URL provided"}), 400
+        # if not file_url:
+        #     return jsonify({"error": "No URL provided"}), 400
         
-        local_file_path, _ = download_file(file_url)
+        # local_file_path, _ = download_file(file_url)
         average_pitch =  get_average_pitch_from_mp3("./sample_audiomp3.mp3", frame_size_ms=20, hop_size_ms=10)
         # Speech to text
         text = transcribe_audio("./sample_audiomp3.mp3")
