@@ -5,3 +5,11 @@ langchain
 unstructured
 python-pptx
 openai
+vosk 
+librosa 
+pydub 
+praat-parselmouth 
+pyworld 
+nltk 
+textstat
+SpeechRecognition

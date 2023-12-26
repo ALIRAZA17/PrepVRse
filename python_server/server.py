@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from textExtractionPDF import textExtractionPDF
 from textExtractionPPTX import textExtractionPPTX
@@ -23,13 +23,7 @@ firebase_admin.initialize_app(cred)
 
 # Connect to Firestore and fetch the file URL
 db = firestore.client()
-audios_ref = db.collection("files")
-docs = audios_ref.stream()
-file_url = None
-for doc in docs:
-    mydata = doc.to_dict()
-    file_url = mydata['url']
-    break
+files_ref = db.collection("files")
 
 
 # @app.route('/api/audio_processing', methods=["GET"])
@@ -61,8 +55,19 @@ for doc in docs:
 @app.route('/api/extract', methods=["GET"])
 def extract_questions():
     try:
+        document_id = request.args.get('id')
+        doc_ref = db.collection("files").document(document_id)
+        doc = doc_ref.get()
+        file_url = None
+        if doc.exists:
+            data = doc.to_dict()
+            file_url = data["url"]
+        else:
+            print("No such document!")
+
         if not file_url:
             return jsonify({"error": "No URL provided"}), 400
+        
         local_file_path, file_extension = download_file(file_url)
         if local_file_path:
             if file_extension == 'pdf':

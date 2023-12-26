@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
 
@@ -17,10 +18,10 @@ class StartSessionScreen extends ConsumerStatefulWidget {
 }
 
 class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
-  List<Map<String, dynamic>> pdfData = [];
   bool _isLoading = false;
   File? _pickedFile;
   String? _fileName;
+  String documentId = "";
   Future<String> uploadPdfToFirebase(String fileName, File file) async {
     final reference = FirebaseStorage.instance.ref().child("files/$fileName");
     final uploadTask = reference.putFile(file);
@@ -54,11 +55,12 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
 
         final fileDownloadLink =
             await uploadPdfToFirebase(_fileName!, _pickedFile!);
-        await _fireStoreRef.collection("files").add({
+        final docRef = await _fireStoreRef.collection("files").add({
           "name": _fileName,
           "url": fileDownloadLink,
         });
 
+        documentId = docRef.id;
         setState(() {
           _pickedFile = null;
           _fileName = null;
@@ -68,6 +70,13 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
         setState(() {
           _isLoading = false;
         });
+      } finally {
+        Get.toNamed(
+          '/generated_questions',
+          arguments: {
+            "id": documentId,
+          },
+        );
       }
     }
   }

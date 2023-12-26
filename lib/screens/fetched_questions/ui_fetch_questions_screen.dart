@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ApiScreen extends StatefulWidget {
+class GeneratedQuestionsScreen extends StatefulWidget {
   @override
-  _ApiScreenState createState() => _ApiScreenState();
+  _GeneratedQuestionsScreenState createState() =>
+      _GeneratedQuestionsScreenState();
 }
 
-class _ApiScreenState extends State<ApiScreen> {
+class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   String _data = '';
-
   @override
   void initState() {
     super.initState();
-    fetchData();
+    dynamic arguments = Get.arguments;
+    String documentId = arguments["id"];
+    print(documentId);
+    fetchData(documentId);
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchData(String documentId) async {
     try {
       http.Response response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/api/extract'),
+        Uri.parse('http://10.0.2.2:5000/api/extract?id=$documentId'),
       );
       if (response.statusCode == 200) {
         print(json.decode(response.body).toString());

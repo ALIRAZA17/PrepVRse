@@ -38,8 +38,8 @@ appRoutes() => [
         transitionDuration: const Duration(milliseconds: 200),
       ),
       GetPage(
-        name: '/testing',
-        page: () => ApiScreen(),
+        name: '/generated_questions',
+        page: () => GeneratedQuestionsScreen(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 200),
       ),

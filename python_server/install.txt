@@ -1,2 +1,1 @@
-# !pip install vosk librosa pydub praat-parselmouth pyworld nltk textstat SpeechRecognition
 # !pip install --upgrade pip setuptools 
