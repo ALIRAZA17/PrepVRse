@@ -13,6 +13,7 @@ from Audio_modules.vocab_level import analyze_and_classify_vocabulary_difficulty
 from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
 
 from questionGeneration import questionGeneration
+from relevanceChecking import relevanceChecking
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +24,7 @@ firebase_admin.initialize_app(cred)
 
 # Connect to Firestore and fetch the file URL
 db = firestore.client()
-
+extracted_text = ""
 
 @app.route('/api/audio_processing', methods=["GET"])
 def audio_processing():
@@ -45,13 +46,15 @@ def audio_processing():
         average_pitch =  get_average_pitch_from_mp3(local_file_path, frame_size_ms=20, hop_size_ms=10)
         # Speech to text
         text = transcribe_audio(local_file_path)
+        #relevance
+        relevance = relevanceChecking(extracted_text, text)
         # Sentiment analysis
         sentiment_score, sentiment_class = analyze_and_classify_sentiment(text)
         # Vocabulary difficulty analysis
         grade_level, difficulty_class = analyze_and_classify_vocabulary_difficulty(text)
         # Speech rate
         speech_rate = calculate_speech_rate_from_text_and_audio(text, local_file_path)
-        return jsonify({"average_pitch": average_pitch,"text": text,"sentiment_score": sentiment_score, "sentiment_class": sentiment_class,"grade_level": grade_level, "difficulty_class": difficulty_class, "speech_rate": speech_rate})
+        return jsonify({"average_pitch": average_pitch,"text": text,"sentiment_score": sentiment_score, "sentiment_class": sentiment_class,"grade_level": grade_level, "difficulty_class": difficulty_class, "speech_rate": speech_rate, "relevance": relevance})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
