@@ -6,11 +6,11 @@ from flask_cors import CORS
 from textExtractionPDF import textExtractionPDF
 from textExtractionPPTX import textExtractionPPTX
 from download_file import download_file
-from Audio_modules.pitch import get_average_pitch_from_mp3
-from Audio_modules.stt import transcribe_audio
-from Audio_modules.sentiment import analyze_and_classify_sentiment
-from Audio_modules.vocab_level import analyze_and_classify_vocabulary_difficulty
-from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
+# from Audio_modules.pitch import get_average_pitch_from_mp3
+# from Audio_modules.stt import transcribe_audio
+# from Audio_modules.sentiment import analyze_and_classify_sentiment
+# from Audio_modules.vocab_level import analyze_and_classify_vocabulary_difficulty
+# from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
 
 from questionGeneration import questionGeneration
 
@@ -32,31 +32,31 @@ for doc in docs:
     break
 
 
-@app.route('/api/audio_processing', methods=["GET"])
-def audio_processing():
-    try:
-        # average_pitch =  get_average_pitch_from_mp3("./sample_audiomp3.mp3", frame_size_ms=20, hop_size_ms=10)
-        # return jsonify({"average_pitch": average_pitch})
+# @app.route('/api/audio_processing', methods=["GET"])
+# def audio_processing():
+#     try:
+#         # average_pitch =  get_average_pitch_from_mp3("./sample_audiomp3.mp3", frame_size_ms=20, hop_size_ms=10)
+#         # return jsonify({"average_pitch": average_pitch})
 
-        # Speech to text
-        # text = transcribe_audio("./sample_audiomp3.mp3")
-        # return jsonify({"text": text})
+#         # Speech to text
+#         # text = transcribe_audio("./sample_audiomp3.mp3")
+#         # return jsonify({"text": text})
 
-        # Sentiment analysis
-        # sentiment_score, sentiment_class = analyze_and_classify_sentiment("I am very good. but don't know what to do")
-        # return jsonify({"sentiment_score": sentiment_score, "sentiment_class": sentiment_class})
+#         # Sentiment analysis
+#         # sentiment_score, sentiment_class = analyze_and_classify_sentiment("I am very good. but don't know what to do")
+#         # return jsonify({"sentiment_score": sentiment_score, "sentiment_class": sentiment_class})
 
-        # Vocabulary difficulty analysis
-        # grade_level, difficulty_class = analyze_and_classify_vocabulary_difficulty("In the realm of erudition, the quintessence of epistemological profundity lies in the synthesis of perspicacious exegesis and the adroit amalgamation of esoteric paradigms. This nascent intellectual tapestry, characterized by its ineffable intricacy, elucidates the imbrications of multifarious axioms within the purview of contemporary scholarship. The conscientious discernment of abstruse postulations necessitates a pedagogical metanoia, fostering a cognizant epistemic heuristic that transcends the conventional confines of disciplinary dichotomies. In such a cognitive milieu, the sagacious elucidation of ontological substrata presupposes an indefatigable intellectual rigor, propelling the scholarly dialectic towards the zenith of erudite sophistication.")
-        # return jsonify({"grade_level": grade_level, "difficulty_class": difficulty_class})
+#         # Vocabulary difficulty analysis
+#         # grade_level, difficulty_class = analyze_and_classify_vocabulary_difficulty("In the realm of erudition, the quintessence of epistemological profundity lies in the synthesis of perspicacious exegesis and the adroit amalgamation of esoteric paradigms. This nascent intellectual tapestry, characterized by its ineffable intricacy, elucidates the imbrications of multifarious axioms within the purview of contemporary scholarship. The conscientious discernment of abstruse postulations necessitates a pedagogical metanoia, fostering a cognizant epistemic heuristic that transcends the conventional confines of disciplinary dichotomies. In such a cognitive milieu, the sagacious elucidation of ontological substrata presupposes an indefatigable intellectual rigor, propelling the scholarly dialectic towards the zenith of erudite sophistication.")
+#         # return jsonify({"grade_level": grade_level, "difficulty_class": difficulty_class})
 
-        # Speech rate
-        speech_rate = calculate_speech_rate_from_text_and_audio("I am very good. but don't know what to do", "./sample_audiomp3.mp3")
-        return jsonify({"speech_rate": speech_rate})
+#         # Speech rate
+#         speech_rate = calculate_speech_rate_from_text_and_audio("I am very good. but don't know what to do", "./sample_audiomp3.mp3")
+#         return jsonify({"speech_rate": speech_rate})
 
         
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/extract', methods=["GET"])
 def extract_questions():
