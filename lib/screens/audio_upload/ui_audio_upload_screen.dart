@@ -45,6 +45,8 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
   }
 
   Future<void> uploadFile() async {
+    dynamic arguments = Get.arguments;
+    String text = arguments["extracted_text"];
     if (_pickedFile != null && _fileName != null) {
       try {
         setState(() {
@@ -73,6 +75,7 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
           '/feedback',
           arguments: {
             "id": documentId,
+            "text": text,
           },
         );
       }
