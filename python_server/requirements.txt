@@ -13,3 +13,4 @@ pyworld
 nltk 
 textstat
 SpeechRecognition
+# python == 3.11.5
