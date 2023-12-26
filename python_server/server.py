@@ -30,19 +30,29 @@ audios_ref = db.collection("audios")
 @app.route('/api/audio_processing', methods=["GET"])
 def audio_processing():
     try:
-        average_pitch =  get_average_pitch_from_mp3("./sample_audiomp3.mp3", frame_size_ms=20, hop_size_ms=10)
+        document_id = request.args.get('id')
+        doc_ref = db.collection("files").document(document_id)
+        doc = doc_ref.get()
+        file_url = None
+        if doc.exists:
+            data = doc.to_dict()
+            file_url = data["url"]
+        else:
+            print("No such document!")
 
+        if not file_url:
+            return jsonify({"error": "No URL provided"}), 400
+        
+        local_file_path, _ = download_file(file_url)
+        average_pitch =  get_average_pitch_from_mp3("./sample_audiomp3.mp3", frame_size_ms=20, hop_size_ms=10)
         # Speech to text
         text = transcribe_audio("./sample_audiomp3.mp3")
-
         # Sentiment analysis
-        sentiment_score, sentiment_class = analyze_and_classify_sentiment("I am very good. but don't know what to do")
-
+        sentiment_score, sentiment_class = analyze_and_classify_sentiment(text)
         # Vocabulary difficulty analysis
         grade_level, difficulty_class = analyze_and_classify_vocabulary_difficulty(text)
-
         # Speech rate
-        speech_rate = calculate_speech_rate_from_text_and_audio("I am very good. but don't know what to do", "./sample_audiomp3.mp3")
+        speech_rate = calculate_speech_rate_from_text_and_audio(text, "./sample_audiomp3.mp3")
         return jsonify({"average_pitch": average_pitch,"text": text,"sentiment_score": sentiment_score, "sentiment_class": sentiment_class,"grade_level": grade_level, "difficulty_class": difficulty_class, "speech_rate": speech_rate})
     
     except Exception as e:
