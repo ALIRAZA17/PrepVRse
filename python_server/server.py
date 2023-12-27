@@ -25,12 +25,13 @@ firebase_admin.initialize_app(cred)
 
 # Connect to Firestore and fetch the file URL
 db = firestore.client()
-extracted_text = ""
 
-@app.route('/api/audio_processing', methods=["GET"])
+@app.route('/api/audio_processing', methods=["POST"])
 def audio_processing():
     try:
-        document_id = request.args.get('id')
+        data = request.json
+        document_id = data.get('id')
+        extracted_text = data.get('extracted_text')
         doc_ref = db.collection("audios").document(document_id)
         doc = doc_ref.get()
         file_url = None
@@ -89,7 +90,7 @@ def extract_questions():
             else:
                 return jsonify({"error": "Unsupported file type"}), 400
             generatedQuestions = questionGeneration(extracted_text)
-            return jsonify({"generated_questions": generatedQuestions})
+            return jsonify({"generated_questions": generatedQuestions,"extracted_text" : extracted_text})
         else:
             return jsonify({"error": "Failed to download the file"}), 500
 
