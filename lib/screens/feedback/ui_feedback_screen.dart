@@ -116,7 +116,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                           color: Colors.orange,
                         ),
                         InfoCard(
-                          title: 'Grade Level',
+                          title: 'Vocab Difficulty',
                           value: _data.isNotEmpty
                               ? _data["difficulty_class"].toString()
                               : 'N/A',
@@ -134,6 +134,13 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                               ? _data["average_pitch"].toStringAsFixed(2)
                               : 'N/A',
                           color: const Color.fromARGB(255, 234, 84, 134),
+                        ),
+                        InfoCard(
+                          title: 'Grade Level',
+                          value: _data.isNotEmpty
+                              ? _data["grade_level"].toStringAsFixed(2)
+                              : 'N/A',
+                          color: Color.fromARGB(255, 233, 231, 92),
                         ),
                       ],
                     ),
