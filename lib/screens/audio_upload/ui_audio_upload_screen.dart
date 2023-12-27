@@ -44,6 +44,26 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
     }
   }
 
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Get.back(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> uploadFile() async {
     dynamic arguments = Get.arguments;
     String text = arguments["extracted_text"];
@@ -79,6 +99,9 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
           },
         );
       }
+    } else {
+      showErrorDialog("Please attach a file before uploading.");
+      return;
     }
   }
 
@@ -103,86 +126,84 @@ class _AudioUploadScreenState extends State<AudioUploadScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Text(
-                    "Start New Session",
+            child: Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Upload your audio",
                     style: Styles.displayXlBoldStyle,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Upload your audio",
-                  style: Styles.displayLargeNormalStyle,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color.fromRGBO(250, 249, 246, 1),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: IconButton(
-                            onPressed: pickFile,
-                            icon: const Icon(Icons.upload_file_outlined),
-                            iconSize: 40,
-                          ),
-                        ),
-                        Text("Attach"),
-                        if (_fileName != null) ...[
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(8),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text("Allowed Formats: .mp3"),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color.fromRGBO(250, 249, 246, 1),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: IconButton(
+                              onPressed: pickFile,
+                              icon: const Icon(Icons.upload_file_outlined),
+                              iconSize: 40,
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.music_video,
-                                ), // PDF Icon
-                                SizedBox(width: 8),
-                                Text(
-                                  _fileName!,
-                                  style: TextStyle(
-                                    fontSize: 14,
+                          ),
+                          Text("Choose File from Device"),
+                          if (_fileName != null) ...[
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 3),
                                   ),
-                                ), // File name
-                              ],
+                                ],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.music_video,
+                                  ), // PDF Icon
+                                  SizedBox(width: 8),
+                                  Text(
+                                    _fileName!,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ), // File name
+                                ],
+                              ),
                             ),
-                          ),
-                        ]
-                      ],
+                          ]
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           _isLoading

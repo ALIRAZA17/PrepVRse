@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,8 +44,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         password: user.password,
       );
 
+      User? createdUser = userCredential.user;
+      if (createdUser != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(createdUser.uid)
+            .set({
+          'email': user.email,
+          'password': user.password,
+          'name': user.name,
+        });
+      }
+
       Get.toNamed('/login');
-      return userCredential.user;
+      return createdUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -70,124 +83,158 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         ref.watch(confirmPasswordTextControllerProvider);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8, top: 90),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "PrepVRse",
-                style: Styles.displayLargeBoldStyle.copyWith(
-                  color: Styles.primaryColor,
-                  fontSize: 32,
+      appBar: AppBar(
+        title: Center(child: const Text("SignUp")),
+        backgroundColor: Styles.primaryColor,
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 18, bottom: 8, right: 18),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "PrepVRse",
+                  style: Styles.displayLargeBoldStyle.copyWith(
+                    color: Styles.primaryColor,
+                    fontSize: 32,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    AppTextField(
-                      label: "Name",
-                      keyboardType: TextInputType.name,
-                      controller: nameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Name is required';
-                        } else if (!RegExp(r'^[a-z A-Z]').hasMatch(
-                          value,
-                        )) {
-                          return "Enter Correct Name";
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AppTextField(
-                      label: "Email",
-                      keyboardType: TextInputType.name,
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Email is required';
-                        } else if (!RegExp(
-                                r'^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})')
-                            .hasMatch(
-                          value,
-                        )) {
-                          return "Enter a valid email address";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AppTextField(
-                      label: "Password",
-                      keyboardType: TextInputType.name,
-                      controller: passwordController,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Password is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AppTextField(
-                      label: "Confirm Password",
-                      keyboardType: TextInputType.name,
-                      controller: confirmPasswordController,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Confirm Password should have a value";
-                        } else if (passwordController.text !=
-                            confirmPasswordController.text) {
-                          return "Both Passwords should match";
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              isRegisterLoading
-                  ? const CircularProgressIndicator()
-                  : AppTextButton(
-                      text: "Sign Up",
-                      onTap: () {
-                        if (formKey.currentState!.validate()) {
-                          final email =
-                              ref.read(emailTextControllerProvider).text;
-                          final password =
-                              ref.read(passwordTextControllerProvider).text;
-                          final name =
-                              ref.read(nameTextControllerProvider).text;
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      AppTextField(
+                        label: "Name",
+                        keyboardType: TextInputType.name,
+                        controller: nameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Name is required';
+                          } else if (!RegExp(r'^[a-z A-Z]').hasMatch(
+                            value,
+                          )) {
+                            return "Enter Correct Name";
+                          }
 
-                          final user = AppUser(
-                              email: email, password: password, name: name);
-                          signUp(
-                            user,
-                          );
-                        }
-                      },
-                      color: Styles.primaryColor,
-                    )
-            ],
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      AppTextField(
+                        label: "Email",
+                        keyboardType: TextInputType.name,
+                        controller: emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          } else if (!RegExp(
+                                  r'^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})')
+                              .hasMatch(
+                            value,
+                          )) {
+                            return "Enter a valid email address";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      AppTextField(
+                        label: "Password",
+                        keyboardType: TextInputType.name,
+                        controller: passwordController,
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      AppTextField(
+                        label: "Confirm Password",
+                        keyboardType: TextInputType.name,
+                        controller: confirmPasswordController,
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Confirm Password should have a value";
+                          } else if (passwordController.text !=
+                              confirmPasswordController.text) {
+                            return "Both Passwords should match";
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                isRegisterLoading
+                    ? const CircularProgressIndicator()
+                    : AppTextButton(
+                        text: "Sign Up",
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            final email =
+                                ref.read(emailTextControllerProvider).text;
+                            final password =
+                                ref.read(passwordTextControllerProvider).text;
+                            final name =
+                                ref.read(nameTextControllerProvider).text;
+
+                            final user = AppUser(
+                                email: email, password: password, name: name);
+                            signUp(
+                              user,
+                            );
+                          }
+                        },
+                        color: Styles.primaryColor,
+                      ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/login');
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Already have an account? ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Log in',
+                          style: TextStyle(
+                            color: Styles.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

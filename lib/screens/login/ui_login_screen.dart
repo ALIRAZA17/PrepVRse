@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
 import 'package:prepvrse/common/resources/widgets/textfields/app_text_field.dart';
+import 'package:prepvrse/screens/signup/provider/confirm_password_text_controller_provider.dart';
 import 'package:prepvrse/screens/signup/provider/email_text_controller_provider.dart';
+import 'package:prepvrse/screens/signup/provider/name_text_controller_provider.dart';
 import 'package:prepvrse/screens/signup/provider/password_text_controller_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -14,10 +18,39 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  bool isLoading = false;
+  Future<void> signIn(String email, String password) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Get.offNamed('/mode_type');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     ref.read(emailTextControllerProvider).clear();
     ref.read(passwordTextControllerProvider).clear();
+    ref.read(nameTextControllerProvider).clear();
+    ref.read(confirmPasswordTextControllerProvider).clear();
     super.initState();
   }
 
@@ -27,8 +60,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final passwordController = ref.watch(passwordTextControllerProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Center(child: const Text("Login")),
+        backgroundColor: Styles.primaryColor,
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 18, bottom: 8, right: 18),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -60,15 +98,52 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               validator: (_) {
                 return null;
               },
+              obscureText: true,
             ),
             const SizedBox(
               height: 20,
             ),
-            AppTextButton(
-              text: "Login",
-              onTap: () {},
-              color: Styles.primaryColor,
-            )
+            isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AppTextButton(
+                    text: "Login",
+                    onTap: () async {
+                      final email = ref.read(emailTextControllerProvider).text;
+                      final password =
+                          ref.read(passwordTextControllerProvider).text;
+                      await signIn(email, password);
+                    },
+                    color: Styles.primaryColor,
+                  ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed('/signup');
+              },
+              child: RichText(
+                text: TextSpan(
+                  text: "Don't have an account? ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Sign Up',
+                      style: TextStyle(
+                        color: Styles.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

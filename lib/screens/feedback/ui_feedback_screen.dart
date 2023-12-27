@@ -31,7 +31,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       });
       http.Response response = await http.post(
         Uri.parse(
-            'http://10.7.84.229:5000/api/audio_processing?id=$documentId'),
+            'http://10.7.86.206:5000/api/audio_processing?id=$documentId'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -140,7 +140,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                           value: _data.isNotEmpty
                               ? _data["grade_level"].toStringAsFixed(2)
                               : 'N/A',
-                          color: Color.fromARGB(255, 233, 231, 92),
+                          color: Color.fromARGB(255, 176, 174, 42),
                         ),
                       ],
                     ),
