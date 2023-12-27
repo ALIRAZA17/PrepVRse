@@ -10,6 +10,7 @@ class AppTextButton extends StatelessWidget {
     this.addBorder = false,
     this.borderColor,
     this.fontSize = 16,
+    this.disabled = false,
   });
 
   final String text;
@@ -19,29 +20,40 @@ class AppTextButton extends StatelessWidget {
   final Color? borderColor;
   final bool addBorder;
   final double? fontSize;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll<Color>(color ?? Colors.white),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return Colors.grey;
+            }
+            return color ?? Colors.white;
+          },
+        ),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: BorderSide(
-                color: borderColor ?? const Color.fromRGBO(184, 184, 184, 1)),
+              color: borderColor ?? const Color.fromRGBO(184, 184, 184, 1),
+            ),
           ),
         ),
         padding: MaterialStateProperty.all(
           const EdgeInsets.only(top: 15.5, bottom: 15.5, left: 70, right: 70),
         ),
       ),
-      onPressed: onTap,
+      onPressed: disabled ? null : onTap,
       child: Text(
         text,
         style: TextStyle(
           fontSize: fontSize,
-          color: textColor ?? Colors.white,
+          color: disabled
+              ? Colors.white.withOpacity(0.5)
+              : textColor ?? Colors.white,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500,
         ),

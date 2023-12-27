@@ -41,11 +41,9 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
         }),
       );
       if (response.statusCode == 200) {
-        print(json.decode(response.body).toString());
         setState(() {
           final mydata = json.decode(response.body);
           _data = mydata;
-          print("I am sentiment: ${_data["sentiment_score"]}");
           isLoading = false;
         });
       } else {

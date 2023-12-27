@@ -13,7 +13,7 @@ class GeneratedQuestionsScreen extends StatefulWidget {
 }
 
 class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
-  String _data = '';
+  List<String> _questions = [];
   String extracted_text = "";
   bool isLoading = false;
   @override
@@ -30,25 +30,26 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
         isLoading = true;
       });
       http.Response response = await http.get(
-        Uri.parse('http://10.7.84.229:5000/api/extract?id=$documentId'),
+        Uri.parse('http://10.0.2.2:5000/api/extract?id=$documentId'),
       );
       if (response.statusCode == 200) {
-        print(json.decode(response.body).toString());
         setState(() {
           final mydata = json.decode(response.body);
-          _data = mydata['generated_questions'];
+          String rawQuestions = mydata['generated_questions'];
+          _questions =
+              rawQuestions.split('\n').where((q) => q.isNotEmpty).toList();
           extracted_text = mydata['extracted_text'];
           isLoading = false;
         });
       } else {
         setState(() {
-          _data = 'Failed to load data';
+          _questions = ['Failed to load data'];
           isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _data = 'Failed to load data: $e';
+        _questions = ['Failed to load data: $e'];
         isLoading = false;
       });
     }
@@ -58,7 +59,14 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('API Data Fetching'),
+          title: const Text("Questionnaire"),
+          backgroundColor: Styles.primaryColor,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.person),
+            ),
+          ],
         ),
         body: Stack(
           children: [
@@ -67,8 +75,37 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : Text(
-                      _data,
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Questions',
+                            style: Styles.displayXlBoldStyle,
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: _questions.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    _questions[index],
+                                    style:
+                                        Styles.displayLargeNormalStyle.copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 10),
+                          ),
+                        ),
+                      ],
                     ),
             ),
             Positioned(
@@ -86,6 +123,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                   );
                 },
                 color: Styles.primaryColor,
+                disabled: _questions.length > 0 ? false : true,
               ),
             )
           ],
