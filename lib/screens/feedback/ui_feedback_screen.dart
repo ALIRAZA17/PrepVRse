@@ -126,7 +126,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                     ),
                     SizedBox(height: 12),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InfoCard(
                           title: 'Pitch',
