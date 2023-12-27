@@ -14,6 +14,7 @@ from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
 
 from questionGeneration import questionGeneration
 from relevanceChecking import relevanceChecking
+from lineSeparator import lineSeparator
 
 app = Flask(__name__)
 CORS(app)
@@ -46,6 +47,8 @@ def audio_processing():
         average_pitch =  get_average_pitch_from_mp3(local_file_path, frame_size_ms=20, hop_size_ms=10)
         # Speech to text
         text = transcribe_audio(local_file_path)
+        #punctuated text
+        text = lineSeparator(text)
         #relevance
         relevance = relevanceChecking(extracted_text, text)
         # Sentiment analysis
