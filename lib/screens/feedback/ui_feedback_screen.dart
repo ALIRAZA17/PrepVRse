@@ -31,7 +31,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       });
       http.Response response = await http.post(
         Uri.parse(
-            'http://10.7.86.206:5000/api/audio_processing?id=$documentId'),
+            'http://10.7.64.187:5000/api/audio_processing?id=$documentId'),
         headers: {
           'Content-Type': 'application/json',
         },
