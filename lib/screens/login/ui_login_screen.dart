@@ -84,7 +84,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               label: "Email",
               keyboardType: TextInputType.name,
               controller: emailController,
-              validator: (_) {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Email is required';
+                } else if (!RegExp(
+                        r'^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})')
+                    .hasMatch(
+                  value,
+                )) {
+                  return "Enter a valid email address";
+                }
                 return null;
               },
             ),
@@ -95,7 +104,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               label: "Password",
               keyboardType: TextInputType.name,
               controller: passwordController,
-              validator: (_) {
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Password is required';
+                }
                 return null;
               },
               obscureText: true,
