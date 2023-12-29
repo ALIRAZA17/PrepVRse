@@ -76,7 +76,7 @@ def extract_questions():
             data = doc.to_dict()
             file_url = data["url"]
         else:
-            print("No such document!")
+            return jsonify({"error": "No such documents"}), 400
 
         if not file_url:
             return jsonify({"error": "No URL provided"}), 400
