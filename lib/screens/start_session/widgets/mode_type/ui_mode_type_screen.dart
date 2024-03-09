@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:prepvrse/screens/start_session/widgets/mode_type/providers/mode_
 import 'package:prepvrse/screens/start_session/ui_start_session.dart';
 
 enum MenuOption { logout }
+
+enum StatusOption { started, fileUploaded, audioUploaded, reportGenerated }
 
 class ModeTypeScreen extends ConsumerStatefulWidget {
   const ModeTypeScreen({super.key});
@@ -35,6 +38,41 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
         FirebaseAuth.instance.signOut();
         Get.toNamed('/login');
         break;
+    }
+  }
+
+  Future<bool> createSession() async {
+    try {
+      Map<String, dynamic> sessionData = {
+        'questionsGenerated': "",
+        'audioFilePath': "",
+        'filePath': "",
+        'reportGenerated': "",
+        'status': StatusOption.started.name,
+      };
+
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId != null) {
+        final collectionRef = FirebaseFirestore.instance.collection('sessions');
+        final docRef = collectionRef.doc(userId);
+        final docSnapshot = await docRef.get();
+
+        if (!docSnapshot.exists) {
+          await docRef.set({
+            'sessions': [sessionData]
+          });
+        } else {
+          List<dynamic> sessions =
+              List.from(docSnapshot.data()?['sessions'] ?? []);
+          sessions.add(sessionData);
+          await docRef.update({'sessions': sessions});
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 
@@ -175,19 +213,31 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
                           setState(() {
                             _isLoading = true;
                           });
-                          await Future.delayed(Duration(milliseconds: 500));
-                          final modeTypeValue =
-                              ref.read(modeTypeProvider.notifier).state;
-                          final isPresentation =
-                              modeTypeValue == "Presentation";
+
+                          bool sessionCreated = await createSession();
+
+                          if (sessionCreated) {
+                            final modeTypeValue =
+                                ref.read(modeTypeProvider.notifier).state;
+                            final isPresentation =
+                                modeTypeValue == "Presentation";
+                            Get.to(
+                              () => StartSessionScreen(
+                                  isPresentation: isPresentation),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Failed to create session. Please try again."),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
 
                           setState(() {
                             _isLoading = false;
                           });
-                          Get.to(
-                            () => StartSessionScreen(
-                                isPresentation: isPresentation),
-                          );
                         }
                       },
                       color: Styles.primaryColor,
