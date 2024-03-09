@@ -31,8 +31,9 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
       setState(() {
         isLoading = true;
       });
+      // something is up here will check it tomorrow
       http.Response response = await http.get(
-        Uri.parse('http://10.7.152.50:5000/api/extract?id=$documentId'),
+        Uri.parse('http://10.7.84.220:5000/api/extract?id=$documentId'),
       );
       if (response.statusCode == 200) {
         setState(() {
