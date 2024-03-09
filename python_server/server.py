@@ -20,7 +20,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize Firebase Admin
-cred = credentials.Certificate("./jsonFile.json")
+cred = credentials.Certificate('./file.json')
 firebase_admin.initialize_app(cred)
 
 # Connect to Firestore and fetch the file URL
