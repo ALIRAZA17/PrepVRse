@@ -6,6 +6,7 @@ import 'package:prepvrse/screens/login/ui_login_screen.dart';
 import 'package:prepvrse/screens/start_session/widgets/mode_type/ui_mode_type_screen.dart';
 import 'package:prepvrse/screens/signup/ui_signup_screen.dart';
 import 'package:prepvrse/screens/fetched_questions/ui_fetch_questions_screen.dart';
+import 'package:prepvrse/screens/vr_session/ui_vr_session.dart';
 
 appRoutes() => [
       GetPage(
@@ -47,6 +48,12 @@ appRoutes() => [
       GetPage(
         name: '/feedback',
         page: () => FeedBackScreen(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+      GetPage(
+        name: '/migrate_to_vr',
+        page: () => SessionVR(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 200),
       ),
