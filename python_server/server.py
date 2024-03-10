@@ -90,12 +90,18 @@ def extract_questions():
             else:
                 return jsonify({"error": "Unsupported file type"}), 400
             generatedQuestions = questionGeneration(extracted_text)
+
             return jsonify({"generated_questions": generatedQuestions,"extracted_text" : extracted_text})
         else:
             return jsonify({"error": "Failed to download the file"}), 500
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/hello', methods=["GET"])
+def helloWorld():
+    return "Hello World"
 
 
 
