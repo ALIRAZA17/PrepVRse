@@ -13,4 +13,5 @@ pyworld
 nltk 
 textstat
 SpeechRecognition
+firebase_admin
 # python == 3.11.5
