@@ -15,3 +15,6 @@ textstat
 SpeechRecognition
 firebase_admin
 # python == 3.11.5
+
+# for converting ppt file into png files
+comtypes
