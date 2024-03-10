@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,22 +75,12 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
 
         final fileDownloadLink =
             await uploadPdfToFirebase(_fileName!, _pickedFile!);
+        final docRef = await _fireStoreRef.collection("files").add({
+          "name": _fileName,
+          "url": fileDownloadLink,
+        });
 
-        final userId = FirebaseAuth.instance.currentUser?.uid;
-        if (userId != null) {
-          final userDocRef = _fireStoreRef.collection('sessions').doc(userId);
-          final docSnapshot = await userDocRef.get();
-
-          if (docSnapshot.exists &&
-              docSnapshot.data()?.containsKey('sessions') == true) {
-            List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
-            if (sessions.isNotEmpty) {
-              sessions.last['filePath'] = fileDownloadLink;
-              await userDocRef.update({'sessions': sessions});
-            }
-          }
-        }
-
+        documentId = docRef.id;
         setState(() {
           _pickedFile = null;
           _fileName = null;
