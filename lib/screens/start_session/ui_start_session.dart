@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
+import 'package:prepvrse/screens/start_session/widgets/mode_type/ui_mode_type_screen.dart';
 
 class StartSessionScreen extends ConsumerStatefulWidget {
   const StartSessionScreen({required this.isPresentation, super.key});
@@ -93,6 +94,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
             List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
             if (sessions.isNotEmpty) {
               sessions.last['filePath'] = fileDownloadLink;
+              sessions.last['status'] = StatusOption.fileUploaded.name;
               await userDocRef.update({'sessions': sessions});
             }
           }
