@@ -99,11 +99,6 @@ def extract_questions():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/hello', methods=["GET"])
-def helloWorld():
-    return "Hello World"
-
-
 
 
 if __name__ == "__main__":
