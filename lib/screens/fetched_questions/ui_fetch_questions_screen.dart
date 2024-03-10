@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -41,6 +43,22 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
           extracted_text = mydata['extracted_text'];
           isLoading = false;
         });
+
+        final userId = FirebaseAuth.instance.currentUser?.uid;
+        if (userId != null) {
+          final userDocRef =
+              FirebaseFirestore.instance.collection('sessions').doc(userId);
+          final docSnapshot = await userDocRef.get();
+
+          if (docSnapshot.exists &&
+              docSnapshot.data()?.containsKey('sessions') == true) {
+            List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
+            if (sessions.isNotEmpty) {
+              sessions.last['questionsGenerated'] = _questions;
+              await userDocRef.update({'sessions': sessions});
+            }
+          }
+        }
       } else {
         setState(() {
           _questions = ['Failed to load data'];
