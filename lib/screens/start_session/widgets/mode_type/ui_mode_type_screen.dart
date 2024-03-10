@@ -44,7 +44,7 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
   Future<bool> createSession() async {
     try {
       Map<String, dynamic> sessionData = {
-        'questionsGenerated': "",
+        'questionsGenerated': <List<String>>[],
         'audioFilePath': "",
         'filePath': "",
         'reportGenerated': "",
