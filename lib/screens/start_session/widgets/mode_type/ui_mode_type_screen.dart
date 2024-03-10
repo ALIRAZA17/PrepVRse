@@ -12,7 +12,13 @@ import 'package:prepvrse/screens/start_session/ui_start_session.dart';
 
 enum MenuOption { logout }
 
-enum StatusOption { started, fileUploaded, audioUploaded, reportGenerated }
+enum StatusOption {
+  started,
+  fileUploaded,
+  questionsGenerated,
+  audioUploaded,
+  reportGenerated
+}
 
 class ModeTypeScreen extends ConsumerStatefulWidget {
   const ModeTypeScreen({super.key});
