@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -31,9 +29,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
       setState(() {
         isLoading = true;
       });
-      // something is up here will check it tomorrow
       http.Response response = await http.get(
-        Uri.parse('http://10.7.84.220:5000/api/extract?id=$documentId'),
+        Uri.parse('http://10.7.86.57:5000/api/extract?id=$documentId'),
       );
       if (response.statusCode == 200) {
         setState(() {
@@ -44,7 +41,6 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
           extracted_text = mydata['extracted_text'];
           isLoading = false;
         });
-        await updateGeneratedQuestions(documentId, _questions.join('\n'));
       } else {
         setState(() {
           _questions = ['Failed to load data'];
@@ -56,25 +52,6 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
         _questions = ['Failed to load data: $e'];
         isLoading = false;
       });
-    }
-  }
-
-  Future<void> updateGeneratedQuestions(
-      String documentId, String generatedQuestions) async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      final userDocRef =
-          FirebaseFirestore.instance.collection('sessions').doc(userId);
-      final docSnapshot = await userDocRef.get();
-
-      if (docSnapshot.exists &&
-          docSnapshot.data()?.containsKey('sessions') == true) {
-        List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
-        if (sessions.isNotEmpty) {
-          sessions.last['questionsGenerated'] = generatedQuestions;
-          await userDocRef.update({'sessions': sessions});
-        }
-      }
     }
   }
 
