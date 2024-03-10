@@ -7,6 +7,7 @@ import 'package:prepvrse/common/constants/styles.dart';
 import 'dart:convert';
 
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
+import 'package:prepvrse/screens/start_session/widgets/mode_type/ui_mode_type_screen.dart';
 
 class GeneratedQuestionsScreen extends StatefulWidget {
   @override
@@ -55,6 +56,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
             List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
             if (sessions.isNotEmpty) {
               sessions.last['questionsGenerated'] = _questions;
+              sessions.last['status'] = StatusOption.questionsGenerated.name;
               await userDocRef.update({'sessions': sessions});
             }
           }
@@ -131,15 +133,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
               bottom: 5,
               right: 10,
               child: AppTextButton(
-                text: "Next",
-                onTap: () {
-                  Get.toNamed(
-                    '/audio_upload',
-                    arguments: {
-                      "extracted_text": extracted_text,
-                    },
-                  );
-                },
+                text: "Start Session",
+                onTap: () => Get.toNamed('/migrate_to_vr'),
                 color: Styles.primaryColor,
                 disabled: _questions.length > 0 ? false : true,
               ),
