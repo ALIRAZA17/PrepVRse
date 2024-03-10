@@ -2,7 +2,6 @@ from langchain.document_loaders import PyPDFLoader
 
 
 def textExtractionPDF(path):
-    
     loader = PyPDFLoader(path)
     pages = loader.load_and_split()
     extractedText = pages[0].page_content
