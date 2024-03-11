@@ -25,7 +25,7 @@ def lineSeparator(extractedText):
 
     # initialize the models
     openai = OpenAI(
-        model_name="text-davinci-003",
+        model_name="gpt-3.5-turbo-instruct",
         openai_api_key= OpenApikey,
         temperature=0.5
     )
