@@ -122,11 +122,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 : AppTextButton(
                     text: "Login",
                     onTap: () async {
-                      // final email = ref.read(emailTextControllerProvider).text;
-                      final email = "ialidar2001@gmail.com";
-                      // final password =
-                      //     ref.read(passwordTextControllerProvider).text;
-                      final password = "aliraza1724";
+                      final email = ref.read(emailTextControllerProvider).text;
+                      final password =
+                          ref.read(passwordTextControllerProvider).text;
                       await signIn(email, password);
                     },
                     color: Styles.primaryColor,
