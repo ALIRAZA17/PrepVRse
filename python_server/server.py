@@ -1,8 +1,6 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from pptx_to_png import pptx_to_pngs_and_upload
 from textExtractionPDF import textExtractionPDF
 from textExtractionPPTX import textExtractionPPTX
 from download_file import download_file
@@ -15,6 +13,8 @@ from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
 from questionGeneration import questionGeneration
 from relevanceChecking import relevanceChecking
 from lineSeparator import lineSeparator
+from firebase_admin_instance import get_firestore_instance
+
 
 from pydub import AudioSegment
 import os
@@ -22,20 +22,17 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Initialize Firebase Admin
-cred = credentials.Certificate('./file.json')
-firebase_admin.initialize_app(cred)
+# Use Firestore instance
+db = get_firestore_instance()
 
-# Connect to Firestore and fetch the file URL
-db = firestore.client()
 
-@app.route('/api/audio_processing', methods=["POST"])
+@app.route("/api/audio_processing", methods=["POST"])
 def audio_processing():
     try:
         extracted_text = ""
         data = request.json
-        audio_Path = data.get('audioFilePath')
-        user_id = data.get('userId')
+        audio_Path = data.get("audioFilePath")
+        user_id = data.get("userId")
 
         # Getting filePath from firebase
         sessions_ref = db.collection("sessions").document(user_id)
@@ -46,13 +43,13 @@ def audio_processing():
         # Downloading file
         local_file_path, file_extension = download_file(file_path)
         if local_file_path:
-            if file_extension == 'pdf':
+            if file_extension == "pdf":
                 extracted_text = textExtractionPDF(local_file_path)
-            elif file_extension == 'pptx':
+            elif file_extension == "pptx":
                 extracted_text = textExtractionPPTX(local_file_path)
             else:
                 return jsonify({"error": "Unsupported file type"}), 400
-        
+
         # downloading audio file locally
         audio_local_file_path, _ = download_file(audio_Path)
 
@@ -60,7 +57,9 @@ def audio_processing():
         mp3_file_path = audio_local_file_path.replace(".wav", ".mp3")
         AudioSegment.from_wav(audio_local_file_path).export(mp3_file_path, format="mp3")
 
-        average_pitch =  get_average_pitch_from_mp3(mp3_file_path, frame_size_ms=20, hop_size_ms=10)
+        average_pitch = get_average_pitch_from_mp3(
+            mp3_file_path, frame_size_ms=20, hop_size_ms=10
+        )
         # Speech to text
         text = transcribe_audio(mp3_file_path)
         # Punctuated text
@@ -80,21 +79,42 @@ def audio_processing():
         os.remove(audio_local_file_path)
 
         # Update reportGenerated key in the last session
-        last_session["reportGenerated"] = {"average_pitch": average_pitch,"text": text,"sentiment_score": sentiment_score, "sentiment_class": sentiment_class,"grade_level": grade_level, "difficulty_class": difficulty_class, "speech_rate": speech_rate, "relevance": relevance}
+        last_session["reportGenerated"] = {
+            "average_pitch": average_pitch,
+            "text": text,
+            "sentiment_score": sentiment_score,
+            "sentiment_class": sentiment_class,
+            "grade_level": grade_level,
+            "difficulty_class": difficulty_class,
+            "speech_rate": speech_rate,
+            "relevance": relevance,
+        }
 
         # Update Firestore document
         sessions_ref.update({"sessions": sessions})
 
-        return jsonify({"average_pitch": average_pitch,"text": text,"sentiment_score": sentiment_score, "sentiment_class": sentiment_class,"grade_level": grade_level, "difficulty_class": difficulty_class, "speech_rate": speech_rate, "relevance": relevance})
-    
+        return jsonify(
+            {
+                "average_pitch": average_pitch,
+                "text": text,
+                "sentiment_score": sentiment_score,
+                "sentiment_class": sentiment_class,
+                "grade_level": grade_level,
+                "difficulty_class": difficulty_class,
+                "speech_rate": speech_rate,
+                "relevance": relevance,
+            }
+        )
+
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/extract', methods=["GET"])
+@app.route("/api/extract", methods=["GET"])
 def extract_questions():
     try:
-        document_id = request.args.get('id')
+        document_id = request.args.get("id")
+        user_id = request.args.get("userId")
         doc_ref = db.collection("files").document(document_id)
         doc = doc_ref.get()
         file_url = None
@@ -106,26 +126,39 @@ def extract_questions():
 
         if not file_url:
             return jsonify({"error": "No URL provided"}), 400
-        
+
         local_file_path, file_extension = download_file(file_url)
         if local_file_path:
-            if file_extension == 'pdf':
+            if file_extension == "pdf":
                 extracted_text = textExtractionPDF(local_file_path)
-            elif file_extension == 'pptx':
+                generatedQuestions = questionGeneration(extracted_text)
+                return jsonify(
+                    {
+                        "generated_questions": generatedQuestions,
+                        "extracted_text": extracted_text,
+                    }
+                )
+            elif file_extension == "pptx":
                 extracted_text = textExtractionPPTX(local_file_path)
+                output_dir = "D:\projects\FYP\prepvrse\python_server\\temp"
+
+                pptx_to_pngs_and_upload(local_file_path, output_dir, user_id)
+
+                generatedQuestions = questionGeneration(extracted_text)
+                return jsonify(
+                    {
+                        "generated_questions": generatedQuestions,
+                        "extracted_text": extracted_text,
+                    }
+                )
             else:
                 return jsonify({"error": "Unsupported file type"}), 400
-            generatedQuestions = questionGeneration(extracted_text)
-
-            return jsonify({"generated_questions": generatedQuestions,"extracted_text" : extracted_text})
         else:
             return jsonify({"error": "Failed to download the file"}), 500
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host="0.0.0.0", debug=True)
