@@ -25,10 +25,10 @@ class SessionVR extends StatelessWidget {
             bottom: 5,
             right: 10,
             child: AppTextButton(
-              text: "Start Session",
+              text: "Get Results",
               onTap: () => Get.toNamed('/feedback'),
               color: Styles.primaryColor,
-              disabled: true,
+              disabled: false,
             ),
           )
         ],
