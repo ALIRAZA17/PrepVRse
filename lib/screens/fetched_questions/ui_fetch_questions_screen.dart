@@ -19,6 +19,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   List<String> _questions = [];
   String extracted_text = "";
   bool isLoading = false;
+  final userId = FirebaseAuth.instance.currentUser!.uid;
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
         isLoading = true;
       });
       http.Response response = await http.get(
-        Uri.parse('http://10.7.86.57:5000/api/extract?id=$documentId'),
+        Uri.parse(
+            'http://10.7.86.25:5000/api/extract?id=$documentId&userId=$userId'),
       );
       if (response.statusCode == 200) {
         setState(() {
