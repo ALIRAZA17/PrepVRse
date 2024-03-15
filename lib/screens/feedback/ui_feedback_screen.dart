@@ -1,7 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:prepvrse/screens/feedback/widgets/infocard.dart';
 
@@ -15,37 +14,38 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
   bool isLoading = false;
   bool isTextExpanded = false;
   bool isRelevanceExpanded = false;
+  final userId = FirebaseAuth.instance.currentUser!.uid;
   @override
   void initState() {
     super.initState();
-    dynamic arguments = Get.arguments;
-    String documentId = arguments["id"];
-    String extracted_text = arguments["text"];
-    fetchData(documentId, extracted_text);
+    fetchData(userId);
   }
 
-  Future<void> fetchData(String documentId, String text) async {
+  Future<void> fetchData(String documentId) async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      setState(() {
-        isLoading = true;
-      });
-      http.Response response = await http.post(
-        Uri.parse(
-            'http://10.7.152.50:5000/api/audio_processing?id=$documentId'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'id': documentId,
-          'extracted_text': text,
-        }),
-      );
-      if (response.statusCode == 200) {
-        setState(() {
-          final mydata = json.decode(response.body);
-          _data = mydata;
-          isLoading = false;
-        });
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('sessions')
+          .doc(documentId)
+          .get();
+
+      if (snapshot.exists && snapshot.data() != null) {
+        var sessionsData = snapshot.data() as Map<String, dynamic>;
+        var sessionsList = sessionsData['sessions'] as List<dynamic>;
+        if (sessionsList.isNotEmpty) {
+          var lastSessionReport = sessionsList.last['reportGenerated'];
+          setState(() {
+            _data = lastSessionReport;
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
       } else {
         setState(() {
           isLoading = false;
@@ -55,6 +55,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       setState(() {
         isLoading = false;
       });
+      print(e);
     }
   }
 
@@ -62,11 +63,16 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
   Widget build(BuildContext context) {
     String displayText = isTextExpanded
         ? _data["text"]
-        : (_data["text"]?.substring(0, 350) ?? "") + "...";
+        : (_data["text"]?.length ?? 0) > 350
+            ? _data["text"].substring(0, 350) + "..."
+            : _data["text"] ?? "";
 
     String relevanceText = isRelevanceExpanded
         ? _data["relevance"].trim()
-        : (_data["relevance"]?.trim().substring(0, 350) ?? "") + "...";
+        : (_data["relevance"]?.length ?? 0) > 350
+            ? _data["relevance"].trim().substring(0, 350) + "..."
+            : _data["relevance"]?.trim() ?? "";
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Feedback'),
