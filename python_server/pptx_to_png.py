@@ -1,18 +1,13 @@
 import os
 import comtypes.client
-import firebase_admin
-from firebase_admin import credentials, firestore, storage as admin_storage
-from google.cloud import storage
+from firebase_admin import firestore
 import shutil
+from firebase_admin_instance import get_firestore_instance, get_storage_bucket
+import pythoncom
 
-# Initialize Firebase
-cred = credentials.Certificate('./file.json')
-firebase_admin.initialize_app(cred,{
-    'storageBucket': 'prepvrse.appspot.com'
-})
+db = get_firestore_instance()
+bucket = get_storage_bucket()
 
-db = firestore.client()
-bucket = admin_storage.bucket()
 
 def upload_to_firebase_storage(local_file_path, remote_file_path):
     blob = bucket.blob(remote_file_path)
@@ -20,15 +15,17 @@ def upload_to_firebase_storage(local_file_path, remote_file_path):
     blob.make_public()
     return blob.public_url
 
+
 def update_firestore(user_id, image_urls):
     doc_ref = db.collection("images").document(user_id)
-    doc_ref.set({
-        'imageUrls': firestore.ArrayUnion(image_urls)
-    }, merge=True)
+    doc_ref.set({"imageUrls": firestore.ArrayUnion(image_urls)}, merge=True)
+
 
 def pptx_to_pngs_and_upload(pptx_path, output_dir, user_id):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+
+    pythoncom.CoInitialize()
 
     powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
     powerpoint.Visible = 1
@@ -46,9 +43,10 @@ def pptx_to_pngs_and_upload(pptx_path, output_dir, user_id):
 
         ppt.Close()
         powerpoint.Quit()
-        
+
         update_firestore(user_id, image_urls)
     finally:
+        pythoncom.CoUninitialize()
         shutil.rmtree(output_dir)
 
 
