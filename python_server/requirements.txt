@@ -18,3 +18,4 @@ firebase_admin
 
 # for converting ppt file into png files
 comtypes
+pywin32
