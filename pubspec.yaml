@@ -5,7 +5,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.3.3 <4.0.0'
 
 
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
   cloud_firestore: ^4.13.6
   get: ^4.6.6
   dropdown_button2: ^2.3.9
-  file_picker: ^6.1.1
+  file_picker: ^8.0.2
   flutter_native_splash: ^2.3.8
   http: ^1.1.2
 
