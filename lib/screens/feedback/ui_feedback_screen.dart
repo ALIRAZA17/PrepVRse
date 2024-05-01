@@ -215,7 +215,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                                 onPressed: () {
                                   setState(() {
                                     isTextExpanded =
-                                        !isTextExpanded; // Toggle text expansion
+                                        !isTextExpanded;
                                   });
                                 },
                                 child: Text(
