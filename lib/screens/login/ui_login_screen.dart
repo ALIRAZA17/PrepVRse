@@ -5,10 +5,8 @@ import 'package:get/get.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
 import 'package:prepvrse/common/resources/widgets/textfields/app_text_field.dart';
-import 'package:prepvrse/screens/signup/provider/confirm_password_text_controller_provider.dart';
-import 'package:prepvrse/screens/signup/provider/email_text_controller_provider.dart';
-import 'package:prepvrse/screens/signup/provider/name_text_controller_provider.dart';
-import 'package:prepvrse/screens/signup/provider/password_text_controller_provider.dart';
+import 'package:prepvrse/screens/login/provider/email_text_controller_provider.dart';
+import 'package:prepvrse/screens/login/provider/password_text_controller_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,7 +22,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         isLoading = true;
       });
-
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -32,26 +29,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       Get.offNamed('/mode_type');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        Get.snackbar('Error', 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        Get.snackbar('Error', 'Wrong password provided for that user.');
       }
     } catch (e) {
-      print(e.toString());
+      Get.snackbar('Error', e.toString());
     } finally {
       setState(() {
         isLoading = false;
       });
     }
-  }
-
-  @override
-  void initState() {
-    ref.read(emailTextControllerProvider).clear();
-    ref.read(passwordTextControllerProvider).clear();
-    ref.read(nameTextControllerProvider).clear();
-    ref.read(confirmPasswordTextControllerProvider).clear();
-    super.initState();
   }
 
   @override
