@@ -22,7 +22,7 @@ class SessionVR extends StatelessWidget {
           ),
           Positioned(
             left: 10,
-            bottom: 5,
+            bottom: 15,
             right: 10,
             child: AppTextButton(
               text: "Get Results",
