@@ -35,7 +35,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
       });
       http.Response response = await http.get(
         Uri.parse(
-            'http://10.7.152.123:5000/api/extract?id=$documentId&userId=$userId'),
+            'http://10.7.237.87:5000/api/extract?id=$documentId&userId=$userId'),
       );
       if (response.statusCode == 200) {
         setState(() {
