@@ -75,7 +75,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback'),
+        title: Text('Session Feedback'),
       ),
       body: isLoading
           ? Center(
