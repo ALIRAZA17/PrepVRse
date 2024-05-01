@@ -43,6 +43,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   @override
+  void initState() {
+    ref.read(emailTextControllerProvider).clear();
+    ref.read(passwordTextControllerProvider).clear();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final emailController = ref.watch(emailTextControllerProvider);
     final passwordController = ref.watch(passwordTextControllerProvider);
