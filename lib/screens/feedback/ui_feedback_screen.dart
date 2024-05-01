@@ -11,10 +11,14 @@ class FeedBackScreen extends StatefulWidget {
 
 class _FeedBackScreenState extends State<FeedBackScreen> {
   Map<dynamic, dynamic> _data = {};
-  bool isLoading = false;
+  bool isLoading = true;
   bool isTextExpanded = false;
   bool isRelevanceExpanded = false;
+  bool hasData = false;
+  String loadingMessage =
+      "Your session is ongoing. Please complete your session.";
   final userId = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   void initState() {
     super.initState();
@@ -22,10 +26,6 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
   }
 
   Future<void> fetchData(String documentId) async {
-    setState(() {
-      isLoading = true;
-    });
-
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('sessions')
@@ -35,25 +35,49 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       if (snapshot.exists && snapshot.data() != null) {
         var sessionsData = snapshot.data() as Map<String, dynamic>;
         var sessionsList = sessionsData['sessions'] as List<dynamic>;
+
         if (sessionsList.isNotEmpty) {
-          var lastSessionReport = sessionsList.last['reportGenerated'];
-          setState(() {
-            _data = lastSessionReport;
-            isLoading = false;
-          });
+          var lastSession = sessionsList.last;
+
+          if (lastSession['audioFilePath'] == "") {
+            setState(() {
+              loadingMessage =
+                  "Your session is ongoing. Please complete your session.";
+              isLoading = true;
+              hasData = false;
+            });
+          } else {
+            var lastSessionReport = lastSession['reportGenerated'];
+            if (lastSessionReport != null) {
+              setState(() {
+                _data = lastSessionReport;
+                isLoading = false;
+                hasData = true;
+              });
+            } else {
+              setState(() {
+                loadingMessage = "Fetching Feedback, Hang Tight!";
+                isLoading = true;
+                hasData = false;
+              });
+            }
+          }
         } else {
           setState(() {
             isLoading = false;
+            hasData = false;
           });
         }
       } else {
         setState(() {
           isLoading = false;
+          hasData = false;
         });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
+        hasData = false;
       });
       print(e);
     }
@@ -78,16 +102,14 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
         title: Text('Session Feedback', style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: isLoading
+      body: isLoading || !hasData
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("Fetching Feedback Hang Tight!!")
+                  SizedBox(height: 10),
+                  Text(loadingMessage),
                 ],
               ),
             )
@@ -237,18 +259,18 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                                       ),
                                     ),
                                     TextButton(
-                                       onPressed: () {
-                                         setState(() {
-                                           isTextExpanded = !isTextExpanded;
-                                         });
-                                       },
-                                       child: Text(
-                                         isTextExpanded
-                                             ? "See Less"
-                                             : "See More",
-                                         style: TextStyle(color: Colors.white),
-                                       ),
-                                     ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isTextExpanded = !isTextExpanded;
+                                        });
+                                      },
+                                      child: Text(
+                                        isTextExpanded
+                                            ? "See Less"
+                                            : "See More",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
