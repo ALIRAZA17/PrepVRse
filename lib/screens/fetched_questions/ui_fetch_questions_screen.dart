@@ -81,14 +81,9 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Questionnaire"),
+          title: const Text("Questionnaire",style: TextStyle(color: Colors.white),),
           backgroundColor: Styles.primaryColor,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.person),
-            ),
-          ],
+
         ),
         body: Stack(
           children: [
@@ -97,48 +92,51 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Questions',
-                            style: Styles.displayXlBoldStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: _questions.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  title: Text(
-                                    _questions[index],
-                                    style:
-                                        Styles.displayLargeNormalStyle.copyWith(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
+                  : Container(
+                    color: Color.fromRGBO(5, 38, 57, 1.000),
+                    child: Column(
+                        children: [
+                          SizedBox(height: 20),
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: _questions.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Card(
+                                    color: Color.fromARGB(255, 244, 242, 234),
+                                    child: ListTile(
+                                      title: Text(
+                                        _questions[index],
+                                        style:
+                                            Styles.displayLargeNormalStyle.copyWith(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 10),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 10),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                  ),
             ),
             Positioned(
               left: 10,
-              bottom: 5,
+              bottom: 15,
               right: 10,
               child: AppTextButton(
                 text: "Start Session",
                 onTap: () => Get.toNamed('/migrate_to_vr'),
                 color: Styles.primaryColor,
                 disabled: _questions.length > 0 ? false : true,
+                borderColor: Styles.primaryColor,
               ),
             )
           ],
