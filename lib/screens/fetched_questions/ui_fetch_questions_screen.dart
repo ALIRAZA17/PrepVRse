@@ -136,7 +136,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                 onTap: () => Get.toNamed('/migrate_to_vr'),
                 color: Styles.primaryColor,
                 disabled: _questions.length > 0 ? false : true,
-                borderColor: Styles.primaryColor,
+                borderColor: _questions.length > 0 ? Styles.primaryColor : Colors.grey,
               ),
             )
           ],
