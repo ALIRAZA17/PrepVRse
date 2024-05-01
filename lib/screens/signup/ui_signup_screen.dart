@@ -60,12 +60,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return createdUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        Get.snackbar('Error', 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        Get.snackbar('Error', 'The account already exists for that email.');
       }
     } catch (e) {
-      print(e);
+      Get.snackbar('Error', e.toString());
     } finally {
       setState(() {
         isRegisterLoading = false;
