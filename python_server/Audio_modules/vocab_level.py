@@ -5,6 +5,7 @@ def analyze_and_classify_vocabulary_difficulty(text):
         # Calculate Flesch-Kincaid Grade Level
         grade_level = flesch_kincaid_grade(text)
 
+        
         # Classify vocabulary difficulty
         if grade_level <= 5:
             difficulty_class = "Very Easy"
