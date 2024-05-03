@@ -182,7 +182,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                                     ? _data["grade_level"].toStringAsFixed(2)
                                     : 'N/A',
                                 dialogInfo:
-                                    "Grade Level is a classification of the vocabulary used in the audio. It can be either Easy, Medium, or Hard.",
+                                    "Grade level represents the class standard who can understand this pitch",
                               ),
                             ],
                           ),
@@ -258,19 +258,19 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                                         color: Colors.white70,
                                       ),
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isTextExpanded = !isTextExpanded;
-                                        });
-                                      },
-                                      child: Text(
-                                        isTextExpanded
-                                            ? "See Less"
-                                            : "See More",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
+                                    // TextButton(
+                                    //   onPressed: () {
+                                    //     setState(() {
+                                    //       isTextExpanded = !isTextExpanded;
+                                    //     });
+                                    //   },
+                                    //   child: Text(
+                                    //     isTextExpanded
+                                    //         ? "See Less"
+                                    //         : "See More",
+                                    //     style: TextStyle(color: Colors.white),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
