@@ -227,15 +227,19 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
                                 ref.read(modeTypeProvider.notifier).state;
                             final isPresentation =
                                 modeTypeValue == "Presentation";
-                            Get.to(
-                              () => StartSessionScreen(
-                                  isPresentation: isPresentation),
-                            );
+                            isPresentation
+                                ? Get.to(
+                                    () => StartSessionScreen(
+                                      isPresentation: isPresentation,
+                                    ),
+                                  )
+                                : Get.toNamed("/interview_questions");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                    "Failed to create session. Please try again."),
+                                  "Failed to create session. Please try again.",
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );
