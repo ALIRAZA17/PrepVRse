@@ -1,4 +1,4 @@
-from langchain.document_loaders import UnstructuredPowerPointLoader
+from langchain_community.document_loaders import UnstructuredPowerPointLoader
 
 def textExtractionPPTX(path):
         
