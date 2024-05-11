@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:prepvrse/common/constants/styles.dart';
 import 'package:prepvrse/common/resources/widgets/buttons/app_text_button.dart';
-import 'package:prepvrse/screens/start_session/widgets/mode_type/ui_mode_type_screen.dart';
 
 class StartSessionScreen extends ConsumerStatefulWidget {
   const StartSessionScreen({required this.isPresentation, super.key});
@@ -85,19 +84,33 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
         documentId = docRef.id;
 
         final userId = FirebaseAuth.instance.currentUser?.uid;
-        if (userId != null) {
-          final userDocRef = _fireStoreRef.collection('sessions').doc(userId);
-          final docSnapshot = await userDocRef.get();
 
-          if (docSnapshot.exists &&
-              docSnapshot.data()?.containsKey('sessions') == true) {
-            List<dynamic> sessions = List.from(docSnapshot.data()!['sessions']);
-            if (sessions.isNotEmpty) {
-              sessions.last['filePath'] = fileDownloadLink;
-              sessions.last['status'] = StatusOption.fileUploaded.name;
-              await userDocRef.update({'sessions': sessions});
-            }
-          }
+        final sessionsDocRef =
+            FirebaseFirestore.instance.collection('sessions').doc(userId);
+        final snapshot = await sessionsDocRef.get();
+
+        List<dynamic> sessions = List.from(snapshot.data()!['sessions']);
+        sessions.last['filePath'] = fileDownloadLink;
+        await sessionsDocRef.update({'sessions': sessions});
+
+        if (widget.isPresentation) {
+          Get.toNamed(
+            '/generated_questions',
+            arguments: {
+              "id": documentId,
+            },
+          );
+        } else {
+          dynamic args = Get.arguments;
+          Get.toNamed(
+            '/generated_questions',
+            arguments: {
+              "id": documentId,
+              "jd": args['jd'],
+              "position": args['position'],
+              "experience": args['experience'],
+            },
+          );
         }
 
         setState(() {
@@ -109,17 +122,10 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
         setState(() {
           _isLoading = false;
         });
-      } finally {
-        Get.toNamed(
-          '/generated_questions',
-          arguments: {
-            "id": documentId,
-          },
-        );
+        showErrorDialog("Failed to upload file: $e");
       }
     } else {
       showErrorDialog("Please attach a file before uploading.");
-      return;
     }
   }
 
