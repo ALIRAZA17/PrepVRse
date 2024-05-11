@@ -25,18 +25,29 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
     super.initState();
     dynamic arguments = Get.arguments;
     String documentId = arguments["id"];
-    fetchData(documentId);
+    String? jd = arguments["jd"];
+    String? position = arguments["position"];
+    String? experience = arguments["experience"];
+    fetchData(documentId, jd: jd, position: position, experience: experience);
   }
 
-  Future<void> fetchData(String documentId) async {
+  Future<void> fetchData(String documentId,
+      {String? jd, String? position, String? experience}) async {
     try {
       setState(() {
         isLoading = true;
       });
-      http.Response response = await http.get(
-        Uri.parse(
-            'http://10.7.237.99:5000/api/extract?id=$documentId&userId=$userId'),
-      );
+
+      String apiUrl =
+          'http://10.7.237.99:5000/api/extract?id=$documentId&userId=$userId';
+
+      if (jd != null && position != null && experience != null) {
+        apiUrl +=
+            '&isInterview=true&jd=${Uri.encodeComponent(jd)}&position=${Uri.encodeComponent(position)}&experience=${Uri.encodeComponent(experience)}';
+      }
+
+      http.Response response = await http.get(Uri.parse(apiUrl));
+
       if (response.statusCode == 200) {
         setState(() {
           final mydata = json.decode(response.body);
@@ -81,9 +92,11 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Questionnaire",style: TextStyle(color: Colors.white),),
+          title: const Text(
+            "Questionnaire",
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: Styles.primaryColor,
-
         ),
         body: Stack(
           children: [
@@ -93,8 +106,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                       child: CircularProgressIndicator(),
                     )
                   : Container(
-                    color: Color.fromRGBO(5, 38, 57, 1.000),
-                    child: Column(
+                      color: Color.fromRGBO(5, 38, 57, 1.000),
+                      child: Column(
                         children: [
                           SizedBox(height: 20),
                           Expanded(
@@ -109,8 +122,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                                     child: ListTile(
                                       title: Text(
                                         _questions[index],
-                                        style:
-                                            Styles.displayLargeNormalStyle.copyWith(
+                                        style: Styles.displayLargeNormalStyle
+                                            .copyWith(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -125,7 +138,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                           ),
                         ],
                       ),
-                  ),
+                    ),
             ),
             Positioned(
               left: 10,
@@ -136,7 +149,8 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
                 onTap: () => Get.toNamed('/migrate_to_vr'),
                 color: Styles.primaryColor,
                 disabled: _questions.length > 0 ? false : true,
-                borderColor: _questions.length > 0 ? Styles.primaryColor : Colors.grey,
+                borderColor:
+                    _questions.length > 0 ? Styles.primaryColor : Colors.grey,
               ),
             )
           ],
