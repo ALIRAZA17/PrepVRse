@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pptx_to_png import pptx_to_pngs_and_upload
+from interviewQuestionGeneration import interviewQuestionGeneration
 from textExtractionPDF import textExtractionPDF
 from textExtractionPPTX import textExtractionPPTX
 from download_file import download_file
@@ -115,46 +116,47 @@ def extract_questions():
     try:
         document_id = request.args.get("id")
         user_id = request.args.get("userId")
+        is_interview = request.args.get("isInterview", "false").lower() == "true"
+        jd = request.args.get("jd", "")
+        position = request.args.get("position", "")
+        experience = request.args.get("experience", "")
+
         doc_ref = db.collection("files").document(document_id)
         doc = doc_ref.get()
-        file_url = None
-        if doc.exists:
-            data = doc.to_dict()
-            file_url = data["url"]
-        else:
-            return jsonify({"error": "No such documents"}), 400
+        if not doc.exists:
+            return jsonify({"error": "No such document"}), 400
 
+        file_url = doc.to_dict().get("url")
         if not file_url:
             return jsonify({"error": "No URL provided"}), 400
 
         local_file_path, file_extension = download_file(file_url)
-        if local_file_path:
-            if file_extension == "pdf":
-                extracted_text = textExtractionPDF(local_file_path)
-                generatedQuestions = questionGeneration(extracted_text)
-                return jsonify(
-                    {
-                        "generated_questions": generatedQuestions,
-                        "extracted_text": extracted_text,
-                    }
-                )
-            elif file_extension == "pptx":
-                extracted_text = textExtractionPPTX(local_file_path)
-                output_dir = "D:\projects\FYP\prepvrse\python_server\\temp"
+        if not local_file_path:
+            return jsonify({"error": "Failed to download the file"}), 500
 
-                pptx_to_pngs_and_upload(local_file_path, output_dir, user_id)
+        if file_extension in ["pdf", "pptx"]:
+            extracted_text = (
+                textExtractionPDF(local_file_path)
+                if file_extension == "pdf"
+                else textExtractionPPTX(local_file_path)
+            )
 
-                generatedQuestions = questionGeneration(extracted_text)
-                return jsonify(
-                    {
-                        "generated_questions": generatedQuestions,
-                        "extracted_text": extracted_text,
-                    }
+            if is_interview:
+                formData = {"jd": jd, "position": position, "experience": experience}
+                generatedQuestions = interviewQuestionGeneration(
+                    extracted_text, formData
                 )
             else:
-                return jsonify({"error": "Unsupported file type"}), 400
+                generatedQuestions = questionGeneration(extracted_text)
+
+            return jsonify(
+                {
+                    "generated_questions": generatedQuestions,
+                    "extracted_text": extracted_text,
+                }
+            )
         else:
-            return jsonify({"error": "Failed to download the file"}), 500
+            return jsonify({"error": "Unsupported file type"}), 400
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
