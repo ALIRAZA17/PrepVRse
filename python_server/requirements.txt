@@ -2,9 +2,10 @@ flask
 flask-cors
 SpeechRecognition
 langchain
+langchain-community
 unstructured
 python-pptx
-openai
+openai==0.28
 vosk 
 librosa 
 pydub 

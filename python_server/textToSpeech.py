@@ -2,10 +2,15 @@ from pathlib import Path
 from openai import OpenAI
 from key import OpenApikey
 client = OpenAI(api_key=OpenApikey)
+import random
 
-def textToSpeech(text, path, voice='alloy'):
-    
-    speech_file_path = Path(__file__).parent / "{path}.mp3"
+voices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
+
+# E.g path='speech.mp3' / 'speech.wav'
+
+def textToSpeech(text, path):
+    voice = random.choice(voices) 
+    speech_file_path = Path(__file__).parent / f"{path}"
     response = client.audio.speech.create(
     model="tts-1",
     voice=voice,
