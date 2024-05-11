@@ -96,6 +96,11 @@ class _InterviewQuestionsState extends ConsumerState<InterviewQuestions> {
                     () => const StartSessionScreen(
                       isPresentation: false,
                     ),
+                    arguments: {
+                      'position': positionController.text,
+                      'experience': positionExperienceController.text,
+                      'jd': jobDescriptionController.text,
+                    },
                   );
                 }
               },
