@@ -1,7 +1,9 @@
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pptx_to_png import pptx_to_pngs_and_upload
 from interviewQuestionGeneration import interviewQuestionGeneration
+from textToSpeech import textToSpeech
 from textExtractionPDF import textExtractionPDF
 from textExtractionPPTX import textExtractionPPTX
 from download_file import download_file
@@ -14,7 +16,7 @@ from Audio_modules.speechrate import calculate_speech_rate_from_text_and_audio
 from questionGeneration import questionGeneration
 from relevanceChecking import relevanceChecking
 from lineSeparator import lineSeparator
-from firebase_admin_instance import get_firestore_instance
+from firebase_admin_instance import get_firestore_instance, get_storage_bucket
 
 
 from pydub import AudioSegment
@@ -25,7 +27,18 @@ CORS(app)
 
 # Use Firestore instance
 db = get_firestore_instance()
+bucket = get_storage_bucket()
 
+def make_file_public(file_path):
+    blob = bucket.blob(file_path)
+    blob.make_public()
+    return blob.public_url 
+
+def upload_file_to_firebase(file_path):
+    blob = bucket.blob(f"QuestionAudios/{file_path.name}")
+    blob.upload_from_filename(file_path)
+    blob.make_public()
+    return blob.public_url
 
 @app.route("/api/audio_processing", methods=["POST"])
 def audio_processing():
@@ -143,21 +156,31 @@ def extract_questions():
 
             if is_interview:
                 formData = {"jd": jd, "position": position, "experience": experience}
-                generatedQuestions = interviewQuestionGeneration(
-                    extracted_text, formData
-                )
+                questions = interviewQuestionGeneration(extracted_text, formData)
             else:
-                generatedQuestions = questionGeneration(extracted_text)
+                questions = questionGeneration(extracted_text)
+            convertedQuestions = [q.strip() for q in questions.split('\n') if q.strip()]
+            print(f"Converted Questions: {convertedQuestions}")
+            audio_urls = []
+            for idx, question in enumerate(convertedQuestions):
+                audio_path = textToSpeech(question, f"{user_id}_question_{idx}.mp3")
+                print("Audio Path: ${audio_path}")
+                audio_url = upload_file_to_firebase(audio_path)
+                os.remove(audio_path)
+                audio_urls.append(audio_url)
+
+            audio_docs_ref = db.collection("questionAudios").document(user_id)
+            audio_docs_ref.set({"audioLinks": audio_urls}, merge=False)
 
             return jsonify(
                 {
-                    "generated_questions": generatedQuestions,
+                    "generated_questions": questions,
                     "extracted_text": extracted_text,
+                    "audio_urls": audio_urls,
                 }
             )
         else:
             return jsonify({"error": "Unsupported file type"}), 400
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
