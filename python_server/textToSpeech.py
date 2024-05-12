@@ -18,3 +18,5 @@ def textToSpeech(text, path):
     )
 
     response.stream_to_file(speech_file_path)
+
+    return speech_file_path
