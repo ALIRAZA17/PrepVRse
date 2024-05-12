@@ -39,7 +39,7 @@ class _GeneratedQuestionsScreenState extends State<GeneratedQuestionsScreen> {
       });
 
       String apiUrl =
-          'http://10.7.237.99:5000/api/extract?id=$documentId&userId=$userId';
+          'http://10.7.237.42:5000/api/extract?id=$documentId&userId=$userId';
 
       if (jd != null && position != null && experience != null) {
         apiUrl +=
