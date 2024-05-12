@@ -49,7 +49,10 @@ class _ModeTypeScreenState extends ConsumerState<ModeTypeScreen> {
 
   Future<bool> createSession() async {
     try {
+      final isPresentation =
+          ref.read(modeTypeProvider.notifier).state == "Presentation";
       Map<String, dynamic> sessionData = {
+        'isPresentation': isPresentation,
         'questionsGenerated': <List<String>>[],
         'audioFilePath': "",
         'filePath': "",
