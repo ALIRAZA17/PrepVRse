@@ -9,7 +9,7 @@ from key import OpenApikey
 # }
 def interviewQuestionGeneration(extractedText, formData):
     print('in interview function')
-    templateQA = """I am making an app where user will upload resume for a mockup interview in my VR app. I have extracted text from the resume and providing it as content below. The following is a resume and profile information for a job applicant. Based on this information, generate 10 questions that a Technical HR representative might ask the applicant. Give importance to job description & position and ask questions which an interviewer asks. (ignore any irrelevant data as I have extracted data from the pdf file so there can be some data which does not make any sense. So just focus on the data.)".
+    templateQA = """I am making an app where user will upload resume for a mockup interview in my VR app. I have extracted text from the resume and providing it as content below. The following is a resume and profile information for a job applicant. Based on this information, generate 5 questions that a Technical HR representative might ask the applicant. Give importance to job description & position and ask questions which an interviewer asks. (ignore any irrelevant data as I have extracted data from the pdf file so there can be some data which does not make any sense. So just focus on the data.)".
     If no question can be generated from the provided content then just reply in a professional manner.
 
     Profile Questions:
