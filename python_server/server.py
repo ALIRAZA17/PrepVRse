@@ -153,6 +153,9 @@ def extract_questions():
                 if file_extension == "pdf"
                 else textExtractionPPTX(local_file_path)
             )
+            if file_extension == "pptx":
+                output_dir = "D:\projects\FYP\prepvrse\python_server\\temp"
+                pptx_to_pngs_and_upload(local_file_path, output_dir, user_id)
 
             if is_interview:
                 formData = {"jd": jd, "position": position, "experience": experience}
@@ -160,11 +163,9 @@ def extract_questions():
             else:
                 questions = questionGeneration(extracted_text)
             convertedQuestions = [q.strip() for q in questions.split('\n') if q.strip()]
-            print(f"Converted Questions: {convertedQuestions}")
             audio_urls = []
             for idx, question in enumerate(convertedQuestions):
                 audio_path = textToSpeech(question, f"{user_id}_question_{idx}.mp3")
-                print("Audio Path: ${audio_path}")
                 audio_url = upload_file_to_firebase(audio_path)
                 os.remove(audio_path)
                 audio_urls.append(audio_url)
