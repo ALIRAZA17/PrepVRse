@@ -26,6 +26,7 @@ class AppTextField extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TextFormField(
+        key: Key('$key TextFormField'),
         decoration: InputDecoration(
           label: Text(
             label,
