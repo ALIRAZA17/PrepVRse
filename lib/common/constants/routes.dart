@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:prepvrse/screens/audio_upload/ui_audio_upload_screen.dart';
 import 'package:prepvrse/screens/feedback/ui_feedback_screen.dart';
+import 'package:prepvrse/screens/feedback/ui_new_feedback_screen.dart';
 import 'package:prepvrse/screens/start_session/ui_start_session.dart';
 import 'package:prepvrse/screens/start_session/widgets/industry_selection/ui_industry_selection.dart';
 import 'package:prepvrse/screens/login/ui_login_screen.dart';
@@ -50,6 +51,12 @@ appRoutes() => [
       GetPage(
         name: '/feedback',
         page: () => FeedBackScreen(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
+      GetPage(
+        name: '/new_feedback',
+        page: () => NewFeedBackScreen(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 200),
       ),
