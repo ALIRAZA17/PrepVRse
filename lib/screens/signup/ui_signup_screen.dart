@@ -110,6 +110,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: Column(
                     children: [
                       AppTextField(
+                        key: ValueKey('nameTextField'),
                         label: "Name",
                         keyboardType: TextInputType.name,
                         controller: nameController,
@@ -129,6 +130,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         height: 10,
                       ),
                       AppTextField(
+                        key: ValueKey('emailTextField'),
                         label: "Email",
                         keyboardType: TextInputType.name,
                         controller: emailController,
@@ -149,6 +151,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         height: 10,
                       ),
                       AppTextField(
+                        key: ValueKey('passwordTextField'),
                         label: "Password",
                         keyboardType: TextInputType.name,
                         controller: passwordController,
@@ -164,6 +167,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         height: 10,
                       ),
                       AppTextField(
+                        key: ValueKey('confirmPasswordTextField'),
                         label: "Confirm Password",
                         keyboardType: TextInputType.name,
                         controller: confirmPasswordController,
