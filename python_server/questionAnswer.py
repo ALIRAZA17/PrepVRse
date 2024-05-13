@@ -33,4 +33,21 @@ def questionAnswer(question, answer):
     return openai(formattedTemplateQA)
 
 
-print(questionAnswer("What do you mean by DOM??", "Who are you? The Document Object Model (DOM) is a programming interface for web documents. It represents the page so that programs can change the document structure, style, and content. The DOM represents the document as nodes and objects; that way, programming languages can interact with the page."))
+print(questionAnswer("How do memory mapped files improve I/O performance?", "Memory-mapped files improve I/O performance by allowing files to be accessed as if they were portions of memory, eliminating the need for explicit read and write operations. This approach reduces system calls and data copying overhead, leading to faster data access, especially for large files, and enabling efficient sharing of data between processes."))
+
+
+# Answer from AI
+# 1) That was a clear and concise explanation of the difference between private and shared memory mapped files. You highlighted the main differences and benefits of each type effectively. Great job!
+
+# 2) Thank you for providing a detailed explanation of the `mmap()` function and its required arguments. Your answer was informative and well-organized. However, it would have been more helpful to also mention the purpose or benefits of using the `mmap()` function in a mockup interview scenario.
+
+# 3) Great answer! You have properly explained the purpose and working of the `mmap()` function. You have also mentioned all the necessary arguments required when using it. Keep up the good work!
+
+# 4) Great job explaining the concept of persisted and non-persisted memory mapped files! Your explanation is clear and concise, and you have provided a useful comparison between the two. It's important to consider performance needs and data durability when choosing between the two options, and you have effectively highlighted this. Keep up the good work!
+
+# 5) Great response! You have clearly explained the difference between persisted and non-persisted memory-mapped files, as well as their importance in an application. Your answer is informative and easy to understand. Keep up the good work! 
+
+
+
+
+
