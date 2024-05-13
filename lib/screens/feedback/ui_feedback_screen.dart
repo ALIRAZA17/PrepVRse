@@ -258,19 +258,19 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                                         color: Colors.white70,
                                       ),
                                     ),
-                                    // TextButton(
-                                    //   onPressed: () {
-                                    //     setState(() {
-                                    //       isTextExpanded = !isTextExpanded;
-                                    //     });
-                                    //   },
-                                    //   child: Text(
-                                    //     isTextExpanded
-                                    //         ? "See Less"
-                                    //         : "See More",
-                                    //     style: TextStyle(color: Colors.white),
-                                    //   ),
-                                    // ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isTextExpanded = !isTextExpanded;
+                                        });
+                                      },
+                                      child: Text(
+                                        isTextExpanded
+                                            ? "See Less"
+                                            : "See More",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
