@@ -165,7 +165,7 @@ def extract_questions():
             convertedQuestions = [q.strip() for q in questions.split('\n') if q.strip()]
             audio_urls = []
             for idx, question in enumerate(convertedQuestions):
-                audio_path = textToSpeech(question, f"{user_id}_question_{idx}.mp3")
+                audio_path = textToSpeech(question, f"{user_id}_question_{idx}.wav")
                 audio_url = upload_file_to_firebase(audio_path)
                 os.remove(audio_path)
                 audio_urls.append(audio_url)
